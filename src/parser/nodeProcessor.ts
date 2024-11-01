@@ -19,8 +19,16 @@ type NamespaceHolder = {
   namespace: string;
 };
 
-const hasModifier = (node: ts.Node, mod: ts.SyntaxKind): boolean | undefined =>
-  node.modifiers && node.modifiers.filter((m) => m.kind === mod).length > 0;
+const hasModifier = (
+  node: ts.Node,
+  mod: ts.SyntaxKind,
+): boolean | undefined => {
+  const modifiers = ts.canHaveModifiers(node)
+    ? ts.getModifiers(node)
+    : undefined;
+
+  return modifiers && modifiers.filter((m) => m.kind === mod).length > 0;
+};
 
 const processExportDeclaration = (
   node: ts.Node,
